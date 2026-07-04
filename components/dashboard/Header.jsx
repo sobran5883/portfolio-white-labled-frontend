@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/lib/AuthContext";
-import { FiUsers, FiLink, FiEdit } from "react-icons/fi";
+import { FiUsers, FiLink, FiEdit, FiDroplet } from "react-icons/fi";
 
 /**
  * Sticky dashboard top bar with nav tabs. The current page's tab is filled,
@@ -17,6 +17,7 @@ export default function Header() {
 
   const tabs = [
     { href: "/dashboard", label: "Editor", Icon: FiEdit },
+    { href: "/dashboard/theme", label: "Theme", Icon: FiDroplet },
     ...(isAdmin ? [{ href: "/dashboard/users", label: "Users", Icon: FiUsers }] : []),
     { href: "/dashboard/portfolio-link", label: "Portfolio link", Icon: FiLink },
   ];

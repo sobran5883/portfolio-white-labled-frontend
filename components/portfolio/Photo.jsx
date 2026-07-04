@@ -14,7 +14,7 @@ const Photo = ({ src }) => {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1, transition: { delay: 1.5, duration: 0.4, ease: "easeIn" } }}
-          className="w-[248px] h-[248px] xl:w-[400px] xl:h-[400px] mix-blend-lighten absolute flex items-center justify-center"
+          className="w-[248px] h-[248px] xl:w-[400px] xl:h-[400px] absolute rounded-full overflow-hidden flex items-center justify-center"
         >
           {src ? (
             <Image
@@ -22,8 +22,9 @@ const Photo = ({ src }) => {
               priority
               quality={100}
               fill
+              sizes="(max-width: 1280px) 248px, 400px"
               alt="profile"
-              className="object-contain rounded-full"
+              className="object-cover rounded-full"
             />
           ) : (
             <FiUser className="text-white/20 text-[120px] xl:text-[180px]" />

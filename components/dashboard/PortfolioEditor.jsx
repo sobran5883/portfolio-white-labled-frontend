@@ -34,7 +34,6 @@ const TABS = [
   "Services",
   "Contact",
   "Socials",
-  "Theme",
 ];
 
 export default function PortfolioEditor({ data, onChange }) {
@@ -81,7 +80,7 @@ export default function PortfolioEditor({ data, onChange }) {
             placeholder={"I build delightful web apps.\nI turn ideas into products."}
             rows={3}
           />
-          <ImageUpload label="Profile photo" value={data.home?.photoUrl} onChange={(v) => set("home.photoUrl", v)} folder="profile" />
+          <ImageUpload label="Profile photo" value={data.home?.photoUrl} onChange={(v) => set("home.photoUrl", v)} folder="profile" crop />
           <ImageUpload label="Resume (PDF or image)" value={data.home?.resumeUrl} onChange={(v) => set("home.resumeUrl", v)} folder="resume" accept="application/pdf,image/*" />
         </Card>
       )}
@@ -312,32 +311,6 @@ export default function PortfolioEditor({ data, onChange }) {
               </div>
             </RepeatItem>
           ))}
-        </Card>
-      )}
-
-      {/* ---------------- THEME ---------------- */}
-      {tab === "Theme" && (
-        <Card title="Branding & theme">
-          <Field label="Logo text (shown in the header)" value={data.theme?.logoText} onChange={(v) => set("theme.logoText", v)} />
-          <div className="flex flex-col gap-1.5">
-            <span className="text-sm text-white/60">Accent color</span>
-            <div className="flex items-center gap-3">
-              <input
-                type="color"
-                value={data.theme?.accentColor || "#00E0F2"}
-                onChange={(e) => set("theme.accentColor", e.target.value)}
-                className="w-12 h-10 bg-transparent rounded cursor-pointer"
-                aria-label="Accent color picker"
-              />
-              <input
-                type="text"
-                value={data.theme?.accentColor ?? ""}
-                onChange={(e) => set("theme.accentColor", e.target.value)}
-                placeholder="#00E0F2"
-                className="bg-[#1c1c22] border border-white/10 rounded-lg px-3 py-2 text-white outline-none focus:border-accent w-40"
-              />
-            </div>
-          </div>
         </Card>
       )}
     </div>

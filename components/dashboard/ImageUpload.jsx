@@ -4,19 +4,35 @@ import { useState } from "react";
 import Image from "next/image";
 import { FiUploadCloud, FiX } from "react-icons/fi";
 import { uploadFile } from "@/lib/api";
+import { readFileAsDataURL } from "@/lib/cropImage";
+import ImageEditModal from "./ImageEditModal";
 
 /**
  * Uploads a single file to S3 (via presigned URL) and reports back the
  * public URL through `onChange`. Shows a preview of the current value.
+ * With `crop`, selected images first open a LinkedIn-style edit dialog
+ * (crop/filter/adjust) and the edited result is what gets uploaded.
  */
-export default function ImageUpload({ label, value, onChange, folder = "misc", accept = "image/*" }) {
+export default function ImageUpload({ label, value, onChange, folder = "misc", accept = "image/*", crop = false }) {
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState("");
+  const [editSrc, setEditSrc] = useState(null);
 
   const handleFile = async (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
     setError("");
+
+    if (crop && file.type.startsWith("image/")) {
+      try {
+        setEditSrc(await readFileAsDataURL(file));
+      } catch (err) {
+        setError(err.message || "Could not read the selected file.");
+      }
+      e.target.value = "";
+      return;
+    }
+
     setUploading(true);
     try {
       const url = await uploadFile(file, folder);
@@ -27,6 +43,14 @@ export default function ImageUpload({ label, value, onChange, folder = "misc", a
       setUploading(false);
       e.target.value = "";
     }
+  };
+
+  // Called by the edit dialog with the final cropped JPEG blob.
+  const handleCropSave = async (blob) => {
+    const file = new File([blob], "photo.jpg", { type: "image/jpeg" });
+    const url = await uploadFile(file, folder);
+    onChange(url);
+    setEditSrc(null);
   };
 
   const isPdf = value && /\.pdf($|\?)/i.test(value);
@@ -64,6 +88,10 @@ export default function ImageUpload({ label, value, onChange, folder = "misc", a
         </div>
       </div>
       {error && <span className="text-xs text-red-300">{error}</span>}
+
+      {editSrc && (
+        <ImageEditModal src={editSrc} onSave={handleCropSave} onCancel={() => setEditSrc(null)} />
+      )}
     </div>
   );
 }
