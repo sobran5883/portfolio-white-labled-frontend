@@ -21,8 +21,9 @@ export default function LoginPage() {
   const [useBackup, setUseBackup] = useState(false);
   const [code, setCode] = useState("");
 
-  const afterTokens = (res) => {
-    router.push(res.totp_enrollment_required ? "/totp-setup" : "/dashboard");
+  const afterTokens = () => {
+    // 2FA is optional (managed from Settings) — always land on the dashboard.
+    router.push("/dashboard");
   };
 
   const onSubmit = async (e) => {
@@ -103,6 +104,12 @@ export default function LoginPage() {
                 {submitting ? "Logging in…" : "Log in"}
               </Button>
             </form>
+
+            <div className="mt-4 text-center">
+              <Link href="/forgot-password" className="text-white/60 hover:text-white text-sm">
+                Forgot password?
+              </Link>
+            </div>
 
             <p className="text-white/60 text-sm mt-6 text-center">
               Don&apos;t have an account?{" "}

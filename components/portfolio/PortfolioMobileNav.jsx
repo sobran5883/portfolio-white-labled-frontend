@@ -15,10 +15,13 @@ const sections = [
   { name: "contact", path: "/contact" },
 ];
 
-const PortfolioMobileNav = ({ slug, logoText }) => {
+const PortfolioMobileNav = ({ slug, base, logoText, visibility }) => {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
-  const base = `/${slug}`;
+  const rootPath = base || `/${slug}`;
+
+  // Hide links for pages the owner turned off. Missing visibility → show all.
+  const visibleSections = sections.filter((s) => visibility?.[s.name] !== false);
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -27,7 +30,7 @@ const PortfolioMobileNav = ({ slug, logoText }) => {
       </SheetTrigger>
       <SheetContent className="flex flex-col">
         <div className="mt-24 mb-10 text-center text-2xl">
-          <Link onClick={() => setOpen(false)} href={base}>
+          <Link onClick={() => setOpen(false)} href={rootPath}>
             <h1>
               {logoText}
               <span className="text-accent">.</span>
@@ -35,8 +38,8 @@ const PortfolioMobileNav = ({ slug, logoText }) => {
           </Link>
         </div>
         <nav className="flex flex-col justify-center items-center gap-8">
-          {sections.map((link) => {
-            const href = `${base}${link.path}`;
+          {visibleSections.map((link) => {
+            const href = `${rootPath}${link.path}`;
             return (
               <Link
                 onClick={() => setOpen(false)}

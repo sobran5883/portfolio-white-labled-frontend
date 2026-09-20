@@ -161,7 +161,7 @@ export default function UsersPage() {
                 />
                 <DetailRow label="Last updated" value={formatDate(detail.portfolio?.updatedAt)} />
 
-                {detail.portfolio?.published && detail.portfolio?.slug && (
+                {/* {detail.portfolio?.published && detail.portfolio?.slug && (
                   <div className="pt-2">
                     <Link href={`/${detail.portfolio.slug}`} target="_blank">
                       <Button variant="outline" size="sm" className="flex items-center gap-2">
@@ -169,7 +169,10 @@ export default function UsersPage() {
                       </Button>
                     </Link>
                   </div>
-                )}
+                )} */}
+                <a href="/preview" target="_blank" rel="noopener noreferrer">
+                  <Button size="sm" variant="outline">Preview</Button>
+                </a>
               </div>
             )}
           </div>

@@ -6,7 +6,8 @@ import { Button } from "@/components/ui/button";
 import { api } from "@/lib/api";
 import Header from "@/components/dashboard/Header";
 import PortfolioEditor from "@/components/dashboard/PortfolioEditor";
-import { FiCheck, FiExternalLink } from "react-icons/fi";
+import { FiCheck } from "react-icons/fi";
+// import { FiCheck, FiExternalLink } from "react-icons/fi";
 
 export default function DashboardPage() {
   const [data, setData] = useState(null);
@@ -57,7 +58,7 @@ export default function DashboardPage() {
     );
   }
 
-  const savedSlug = data.slug;
+  // const savedSlug = data.slug;
 
   return (
     <div className="container mx-auto py-6">
@@ -80,13 +81,16 @@ export default function DashboardPage() {
 
       {/* Sticky save footer for convenience */}
       <div className="sticky bottom-4 mt-8 flex justify-end gap-3">
-        {savedSlug && (
+        {/* {savedSlug && (
           <Link href={`/${savedSlug}`} target="_blank">
             <Button variant="outline" className="flex items-center gap-2 bg-primary shadow-lg">
               View live <FiExternalLink />
             </Button>
           </Link>
-        )}
+        )} */}
+        <a href="/preview" target="_blank" rel="noopener noreferrer">
+          <Button size="sm" variant="outline">Preview</Button>
+        </a>
         <Button onClick={saveContent} disabled={saving} className="flex items-center gap-2 shadow-lg">
           {savedAt ? (<><FiCheck /> Saved</>) : saving ? "Saving…" : "Save changes"}
         </Button>

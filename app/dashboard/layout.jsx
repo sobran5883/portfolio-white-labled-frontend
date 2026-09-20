@@ -10,13 +10,12 @@ export default function DashboardLayout({ children }) {
 
   useEffect(() => {
     if (loading) return;
+    // 2FA is optional and managed from Settings, so the only gate here is
+    // being signed in at all.
     if (!user) router.replace("/login");
-    // TOTP is mandatory for every account — enforce enrollment before the
-    // dashboard is usable (covers pre-2FA accounts logging in again).
-    else if (!user.totpEnabled) router.replace("/totp-setup");
   }, [loading, user, router]);
 
-  if (loading || !user || !user.totpEnabled) {
+  if (loading || !user) {
     return (
       <div className="min-h-screen flex items-center justify-center text-white/50">
         Loading…

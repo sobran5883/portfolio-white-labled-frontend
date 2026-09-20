@@ -6,5 +6,6 @@ export default async function ResumePage({ params }) {
   const { slug } = await params;
   const portfolio = await getPublicPortfolio(slug);
   if (!portfolio) notFound();
+  if (portfolio.visibility?.resume === false) notFound();
   return <ResumeSection portfolio={portfolio} />;
 }

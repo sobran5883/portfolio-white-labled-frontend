@@ -85,13 +85,16 @@ export default function ThemePage() {
 
       {/* Sticky save footer for convenience */}
       <div className="sticky bottom-4 mt-8 flex justify-end gap-3">
-        {savedSlug && (
+        {/* {savedSlug && (
           <Link href={`/${savedSlug}`} target="_blank">
             <Button variant="outline" className="flex items-center gap-2 bg-primary shadow-lg">
               View live <FiExternalLink />
             </Button>
           </Link>
-        )}
+        )} */}
+        <a href="/preview" target="_blank" rel="noopener noreferrer">
+          <Button size="sm" variant="outline">Preview</Button>
+        </a>
         <Button onClick={saveContent} disabled={saving} className="flex items-center gap-2 shadow-lg">
           {savedAt ? (<><FiCheck /> Saved</>) : saving ? "Saving…" : "Save changes"}
         </Button>

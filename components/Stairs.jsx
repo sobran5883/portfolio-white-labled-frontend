@@ -1,44 +1,56 @@
-import {animate, motion} from "framer-motion"
+import { motion } from "framer-motion";
+import { transitionTiming } from "@/lib/pageTransitions";
 
-//variants
-const stairAnimation={
-    initial:{
-        top:"0%",
-    },
-    animate:{
-        top:"100%",
-    },
-    exit:{
-        top:["100%", "0%"]
-    }
-}
+const T = transitionTiming("stairs");
 
-const reverseIndex = (index)=>{
-    const totalSteps=8;
-    return totalSteps-index-1;
-}
-const Stairs=()=> {
+// rightmost column moves first, so the wave sweeps right-to-left in both
+// directions (same as the original stairs)
+const reverseIndex = (index) => T.panels - index - 1;
+
+// variants — full-height columns slide down out of view to reveal the page
+// and rise back up from below on exit. The reveal waits `revealDelay` so the
+// route content has already swapped behind the closed columns (see
+// PageTransition) — the stairs open directly onto the new page.
+const stairAnimation = {
+  initial: {
+    top: "0%",
+  },
+  animate: (index) => ({
+    top: "100%",
+    transition: {
+      duration: T.duration,
+      ease: "easeInOut",
+      delay: T.revealDelay + reverseIndex(index) * T.stagger,
+    },
+  }),
+  exit: (index) => ({
+    top: ["100%", "0%"],
+    transition: {
+      duration: T.duration,
+      ease: "easeInOut",
+      delay: reverseIndex(index) * T.stagger,
+    },
+  }),
+};
+
+const Stairs = () => {
   return (
     <>
-       {[...Array(8)].map((_,index)=>{
-        return(
-            <motion.div
-                key={index}
-                variants={stairAnimation}
-                initial="initial"
-                animate="animate"
-                exit="exit"
-                transition={{
-                   duration:0.2,
-                   ease:"easeInOut",
-                   delay: reverseIndex(index)*0.05,
-                }}
-                className="h-full w-full bg-white relative"
-            />
+      {[...Array(T.panels)].map((_, index) => {
+        return (
+          <motion.div
+            key={index}
+            custom={index}
+            variants={stairAnimation}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            className="h-full w-full bg-white relative"
+          />
         );
-       })}
+      })}
     </>
-  )
-}
+  );
+};
 
-export default Stairs
+export default Stairs;

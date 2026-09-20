@@ -12,14 +12,17 @@ const sections = [
   { name: "contact", path: "/contact" },
 ];
 
-const PortfolioNav = ({ slug }) => {
+const PortfolioNav = ({ slug, base, visibility }) => {
   const pathname = usePathname();
-  const base = `/${slug}`;
+  const rootPath = base || `/${slug}`;
+
+  // Hide links for pages the owner turned off. Missing visibility → show all.
+  const visibleSections = sections.filter((s) => visibility?.[s.name] !== false);
 
   return (
     <nav className="flex gap-8">
-      {sections.map((link) => {
-        const href = `${base}${link.path}`;
+      {visibleSections.map((link) => {
+        const href = `${rootPath}${link.path}`;
         const active = pathname === href;
         return (
           <Link

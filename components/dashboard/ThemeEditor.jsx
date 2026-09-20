@@ -1,6 +1,7 @@
 "use client";
 
 import { Field, Card } from "./ui";
+import { PAGE_TRANSITIONS, DEFAULT_PAGE_TRANSITION } from "@/lib/pageTransitions";
 
 /**
  * Theme & appearance settings, edited on the dedicated /dashboard/theme page.
@@ -10,6 +11,8 @@ import { Field, Card } from "./ui";
 export default function ThemeEditor({ data, onChange }) {
   const setTheme = (field, value) =>
     onChange({ ...data, theme: { ...(data.theme || {}), [field]: value } });
+
+  const pageTransition = data.theme?.pageTransition || DEFAULT_PAGE_TRANSITION;
 
   return (
     <div className="flex flex-col gap-6">
@@ -40,6 +43,34 @@ export default function ThemeEditor({ data, onChange }) {
               className="bg-[#1c1c22] border border-white/10 rounded-lg px-3 py-2 text-white outline-none focus:border-accent w-40"
             />
           </div>
+        </div>
+      </Card>
+
+      <Card title="Animations">
+        <div className="flex flex-col gap-1.5">
+          <span className="text-sm text-white/60">Page transition</span>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            {PAGE_TRANSITIONS.map((t) => (
+              <button
+                key={t.key}
+                type="button"
+                onClick={() => setTheme("pageTransition", t.key)}
+                className={`text-left rounded-xl border p-4 transition-colors ${
+                  pageTransition === t.key
+                    ? "border-accent bg-accent/10"
+                    : "border-white/10 hover:border-white/30"
+                }`}
+              >
+                <p className={`font-medium ${pageTransition === t.key ? "text-accent" : "text-white"}`}>
+                  {t.label}
+                </p>
+                <p className="text-sm text-white/50 mt-1">{t.description}</p>
+              </button>
+            ))}
+          </div>
+          <p className="text-xs text-white/40 mt-1">
+            Played when visitors move between pages of your portfolio.
+          </p>
         </div>
       </Card>
     </div>

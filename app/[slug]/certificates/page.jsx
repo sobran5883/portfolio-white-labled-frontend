@@ -6,5 +6,6 @@ export default async function CertificatesPage({ params }) {
   const { slug } = await params;
   const portfolio = await getPublicPortfolio(slug);
   if (!portfolio) notFound();
+  if (portfolio.visibility?.certificates === false) notFound();
   return <CertificatesSection portfolio={portfolio} />;
 }

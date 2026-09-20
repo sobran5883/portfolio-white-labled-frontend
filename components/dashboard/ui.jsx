@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { FiPlus } from "react-icons/fi";
 
 // Small presentational helpers shared across the dashboard editor.
@@ -15,6 +16,68 @@ export function Field({ label, value, onChange, placeholder, type = "text" }) {
         onChange={(e) => onChange(e.target.value)}
         className="bg-[#1c1c22] border border-white/10 rounded-lg px-3 py-2 text-white outline-none focus:border-accent"
       />
+    </label>
+  );
+}
+
+// Field backed by an array (e.g. comma- or newline-separated lists). It keeps
+// the raw text you type in local state and only converts to/from the array at
+// the edges, so separator characters (commas, spaces, newlines) survive typing.
+// Reparsing the value on every keystroke — and reformatting it back for display
+// — would delete the separator the instant you press it. `format` turns the
+// array into editable text; `parse` turns edited text back into the array.
+export function CsvField({
+  label,
+  value,
+  onChange,
+  placeholder,
+  multiline = false,
+  rows = 3,
+  format = (arr) => (arr || []).join(", "),
+  parse = (str) => str.split(",").map((s) => s.trim()).filter(Boolean),
+}) {
+  const canonical = format(value);
+  const [text, setText] = useState(canonical);
+  const [editing, setEditing] = useState(false);
+
+  // Resync when the underlying value changes from outside (initial data load,
+  // switching between repeated items). Skipped while typing so the user's
+  // in-progress commas/spaces aren't normalized away mid-edit.
+  useEffect(() => {
+    if (!editing) setText(canonical);
+  }, [canonical, editing]);
+
+  const handle = (raw) => {
+    setText(raw);
+    onChange(parse(raw));
+  };
+
+  const cls =
+    "bg-[#1c1c22] border border-white/10 rounded-lg px-3 py-2 text-white outline-none focus:border-accent";
+
+  return (
+    <label className="flex flex-col gap-1.5">
+      <span className="text-sm text-white/60">{label}</span>
+      {multiline ? (
+        <textarea
+          value={text}
+          placeholder={placeholder}
+          rows={rows}
+          onChange={(e) => handle(e.target.value)}
+          onFocus={() => setEditing(true)}
+          onBlur={() => setEditing(false)}
+          className={`${cls} resize-y`}
+        />
+      ) : (
+        <input
+          value={text}
+          placeholder={placeholder}
+          onChange={(e) => handle(e.target.value)}
+          onFocus={() => setEditing(true)}
+          onBlur={() => setEditing(false)}
+          className={cls}
+        />
+      )}
     </label>
   );
 }

@@ -6,5 +6,6 @@ export default async function WorkPage({ params }) {
   const { slug } = await params;
   const portfolio = await getPublicPortfolio(slug);
   if (!portfolio) notFound();
+  if (portfolio.visibility?.work === false) notFound();
   return <WorkSection portfolio={portfolio} />;
 }

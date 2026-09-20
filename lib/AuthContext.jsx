@@ -126,6 +126,14 @@ export function AuthProvider({ children }) {
     setUser(safeUser);
   }, []);
 
+  /**
+   * Replaces the in-memory user after a settings change (name, 2FA toggle)
+   * so the UI reflects it immediately without a round-trip.
+   */
+  const updateUser = useCallback((safeUser) => {
+    setUser(safeUser);
+  }, []);
+
   const logout = useCallback(() => {
     clearRefreshTimer();
     api.logout().catch(() => {}); // fire-and-forget; revokes server-side
@@ -145,6 +153,7 @@ export function AuthProvider({ children }) {
         totpVerify,
         totpBackupVerify,
         markTotpEnrolled,
+        updateUser,
         logout,
       }}
     >

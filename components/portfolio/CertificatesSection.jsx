@@ -10,7 +10,7 @@ const CertificatesSection = ({ portfolio }) => {
   return (
     <motion.section
       initial={{ opacity: 0 }}
-      animate={{ opacity: 1, transition: { delay: 1.5, duration: 0.4, ease: "easeIn" } }}
+      animate={{ opacity: 1, transition: { duration: 0.4, ease: "easeIn" } }}
     >
       <div className="container mx-auto">
         <div className="flex flex-col gap-3 text-center xl:text-left mb-10">

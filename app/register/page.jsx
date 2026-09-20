@@ -59,8 +59,8 @@ export default function RegisterPage() {
     setVerifying(true);
     try {
       await verifyOtp(email, otp);
-      // TOTP is mandatory — new accounts go straight to enrollment.
-      router.push("/totp-setup");
+      // 2FA is optional — users can enable it later from Settings.
+      router.push("/dashboard");
     } catch (err) {
       setOtpError(err.message || "Verification failed.");
       // The pending registration is gone (expired / too many attempts) —

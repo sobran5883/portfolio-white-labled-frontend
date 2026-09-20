@@ -6,5 +6,6 @@ export default async function AchievementsPage({ params }) {
   const { slug } = await params;
   const portfolio = await getPublicPortfolio(slug);
   if (!portfolio) notFound();
+  if (portfolio.visibility?.achievements === false) notFound();
   return <AchievementsSection portfolio={portfolio} />;
 }

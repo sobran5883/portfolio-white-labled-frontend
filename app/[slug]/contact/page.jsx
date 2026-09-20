@@ -6,5 +6,6 @@ export default async function ContactPage({ params }) {
   const { slug } = await params;
   const portfolio = await getPublicPortfolio(slug);
   if (!portfolio) notFound();
+  if (portfolio.visibility?.contact === false) notFound();
   return <ContactSection portfolio={portfolio} />;
 }

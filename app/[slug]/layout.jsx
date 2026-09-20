@@ -3,7 +3,7 @@ import { getPublicPortfolio } from "@/lib/server/getPublicPortfolio";
 import { accentStyle } from "@/lib/theme";
 
 import PortfolioHeader from "@/components/portfolio/PortfolioHeader";
-import StairTransition from "@/components/StairTransition";
+import PortfolioTransition from "@/components/PortfolioTransition";
 import PageTransition from "@/components/PageTransition";
 
 export async function generateMetadata({ params }) {
@@ -26,9 +26,9 @@ export default async function PortfolioLayout({ children, params }) {
 
   return (
     <div style={accentStyle(theme.accentColor)} className="min-h-screen">
-      <PortfolioHeader slug={slug} logoText={theme.logoText || "Portfolio"} />
-      <StairTransition />
-      <PageTransition>{children}</PageTransition>
+      <PortfolioHeader slug={slug} logoText={theme.logoText || "Portfolio"} visibility={portfolio.visibility} />
+      <PortfolioTransition variant={theme.pageTransition} />
+      <PageTransition variant={theme.pageTransition}>{children}</PageTransition>
     </div>
   );
 }
