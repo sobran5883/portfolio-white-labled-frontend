@@ -9,6 +9,16 @@ const nextConfig = {
       { protocol: "http", hostname: "localhost" },
     ],
   },
+  // Deployed: proxy /api to the backend so the browser only ever talks to this
+  // origin. The refresh cookie is SameSite=Strict, so it must be first-party —
+  // a direct call to a different site (e.g. *.onrender.com) would never carry
+  // it. Unset in local dev, where NEXT_PUBLIC_API_URL points at the backend.
+  async rewrites() {
+    const backend = process.env.BACKEND_URL;
+    return backend
+      ? [{ source: "/api/:path*", destination: `${backend.replace(/\/$/, "")}/api/:path*` }]
+      : [];
+  },
 };
 
 export default nextConfig;
